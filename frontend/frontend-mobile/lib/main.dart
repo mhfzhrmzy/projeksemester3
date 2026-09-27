@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'data/posttest_data.dart';
-import 'data/pretest_data.dart';
-import 'screens/test_page.dart';
-import 'theme/app_colors.dart';
+import 'common/theme/app_colors.dart';
+import 'login/login_page.dart';
+import 'register/register_page.dart';
+import 'pretest/pretest_page.dart';
+import 'posttest/posttest_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Pre-Test & Post-Test Dasar Python',
+      title: 'Semester 3 Project',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -27,8 +28,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/// Simple entry menu so both screens are easy to reach for review.
-/// Not part of the reference design — purely a convenience launcher.
+/// Entry menu so every screen (Login, Registrasi, Pre-Test, Post-Test)
+/// is easy to reach. Not part of either original reference design —
+/// purely a launcher tying the two codebases together.
 class HomeMenuPage extends StatelessWidget {
   const HomeMenuPage({super.key});
 
@@ -55,15 +57,28 @@ class HomeMenuPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 32),
                 _MenuButton(
+                  label: 'Login',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const LoginPage()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _MenuButton(
+                  label: 'Registrasi',
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const RegisterPage()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                _MenuButton(
                   label: 'Mulai Pre-Test',
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => TestPage(
-                          title: 'Pre-Test Dasar Python',
-                          questions: preTestQuestions,
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (_) => const PretestPage()),
                     );
                   },
                 ),
@@ -72,12 +87,7 @@ class HomeMenuPage extends StatelessWidget {
                   label: 'Mulai Post-Test',
                   onTap: () {
                     Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => TestPage(
-                          title: 'Post-Test Dasar Python',
-                          questions: postTestQuestions,
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (_) => const PosttestPage()),
                     );
                   },
                 ),
