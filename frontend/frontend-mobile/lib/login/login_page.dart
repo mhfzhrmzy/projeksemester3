@@ -4,6 +4,7 @@ import '../common/widgets/auth_header.dart';
 import '../common/widgets/auth_avatar_icon.dart';
 import '../common/widgets/auth_text_field.dart';
 import '../register/register_page.dart';
+import '../views/beranda/beranda_view.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -24,13 +25,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _login() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Login ditekan')),
+    // TODO: validasi kredensial ke API
+    // Sementara langsung masuk ke Beranda
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const BerandaView(),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    // Padding horizontal selaras dengan TestPage (Pre/Post-Test)
+    final double hp = (MediaQuery.of(context).size.width * 0.075).clamp(22.0, 40.0);
+
     return Scaffold(
       backgroundColor: kBackground,
       body: SingleChildScrollView(
@@ -41,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
             const AuthAvatarIcon(),
             const SizedBox(height: 28),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: hp),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,

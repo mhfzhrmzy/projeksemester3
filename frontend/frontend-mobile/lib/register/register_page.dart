@@ -38,6 +38,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Padding horizontal selaras dengan TestPage (Pre/Post-Test)
+    final double hp = (MediaQuery.of(context).size.width * 0.075).clamp(22.0, 40.0);
+
     return Scaffold(
       backgroundColor: kBackground,
       body: SingleChildScrollView(
@@ -48,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
             const AuthAvatarIcon(),
             const SizedBox(height: 28),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
+              padding: EdgeInsets.symmetric(horizontal: hp),
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
