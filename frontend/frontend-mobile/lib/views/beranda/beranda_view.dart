@@ -27,8 +27,8 @@ class _BerandaViewState extends State<BerandaView> {
   // ── Dummy data profil pengguna (ganti dengan data dari API/auth) ─────────
   static const _namaUser = 'Seto Aji Son Horeg';
   static const _kelasUser = 'Kelas 10 TKJ - SMKN 2 Jember';
-  static const _totalMateri = 48;
-  static const _totalQuiz = 120;
+  static const _totalMateri = 2;
+  static const _totalQuiz = 4;
 
   void _onFooterTap(int idx) {
     setState(() => _footerIndex = idx);
@@ -83,7 +83,7 @@ class _BerandaViewState extends State<BerandaView> {
         child: Column(
           children: [
             // ── Header Profil — hp dihitung sendiri di dalam widget ─────────
-            _ProfileHeader(nama: _namaUser, kelas: _kelasUser),
+            const _ProfileHeader(nama: _namaUser, kelas: _kelasUser),
 
             // ── Konten Scrollable ─────────────────────────────────────────
             Expanded(
@@ -101,7 +101,7 @@ class _BerandaViewState extends State<BerandaView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Card statistik
-                          _StatsCard(
+                          const _StatsCard(
                             totalMateri: _totalMateri,
                             totalQuiz: _totalQuiz,
                           ),
@@ -118,17 +118,17 @@ class _BerandaViewState extends State<BerandaView> {
                           ),
                           const SizedBox(height: 12),
 
-                          // Grid materi — responsive 2 kolom
+                          // Grid materi
                           GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             itemCount: dummyMateriList.length,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: constraints.maxWidth > 600 ? 4 : 2,
                               mainAxisSpacing: 14,
                               crossAxisSpacing: 14,
-                              childAspectRatio: 0.85,
+                              childAspectRatio: 0.88, // sedikit lebih tinggi dari lebar
                             ),
                             itemBuilder: (gridCtx, i) {
                               final materi = dummyMateriList[i];
@@ -172,9 +172,9 @@ class _ProfileHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.fromLTRB(hp, 18, hp, 36),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: AppColors.primary,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(28),
           bottomRight: Radius.circular(28),
         ),
@@ -196,19 +196,26 @@ class _ProfileHeader extends StatelessWidget {
           // Baris avatar + nama + kelas
           Row(
             children: [
-              // Avatar inisial
+              // Avatar profil clean white dengan corner radius 20 & inisial maroon
               Container(
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF4A7C59),
-                  borderRadius: BorderRadius.circular(14),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.12),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: Center(
                   child: Text(
                     nama.isNotEmpty ? nama[0].toUpperCase() : 'U',
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.primary,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -311,7 +318,7 @@ class _StatItem extends StatelessWidget {
           children: [
             Text(
               value,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: AppColors.primary,
@@ -360,12 +367,12 @@ class _MateriCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header maroon berisi kode kelas
+            // Header maroon berisi kode kelas — diperlebar ke bawah
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
-              decoration: BoxDecoration(
+              padding: const EdgeInsets.fromLTRB(10, 9, 10, 13),
+              decoration: const BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: const BorderRadius.only(
+                borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(14),
                   topRight: Radius.circular(14),
                 ),
@@ -375,7 +382,7 @@ class _MateriCard extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color: Colors.white,
-                  fontSize: 12,
+                  fontSize: 11.5,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -384,28 +391,35 @@ class _MateriCard extends StatelessWidget {
             // Body card
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Text(
-                      materi.judul,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
+                    // Judul di-center dalam ruang tersisa,
+                    // otomatis menyesuaikan panjang judul (1-2 baris)
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          materi.judul,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontSize: 12.5,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                            height: 1.25,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
                     const Divider(height: 1),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
                     Text(
                       'Guru Mata Pelajaran:',
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: 9,
                         color: Colors.grey.shade500,
                       ),
                     ),
@@ -414,7 +428,7 @@ class _MateriCard extends StatelessWidget {
                       materi.guruMapel,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        fontSize: 10,
+                        fontSize: 9,
                         fontWeight: FontWeight.w500,
                         color: Colors.black87,
                       ),
@@ -476,7 +490,7 @@ class _MateriActionSheet extends StatelessWidget {
           // Judul materi
           Text(
             materi.judul,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: AppColors.primary,
