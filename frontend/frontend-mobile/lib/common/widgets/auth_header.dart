@@ -12,11 +12,7 @@ class AuthHeader extends StatelessWidget {
     return Container(
       height: 200,
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [kMaroonLight, kMaroonDark],
-        ),
+        color: kMaroon,
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),

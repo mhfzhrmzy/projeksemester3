@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 
 /// Color palette for the Login & Register screens.
-/// Kept separate from [AppColors] (used by Pre-Test / Post-Test)
-/// since the two features were designed with different palettes.
-const kMaroon = Color(0xFF7B1A35);
-const kMaroonDark = Color(0xFF5C1228);
-const kMaroonLight = Color(0xFF9C2242);
+/// Unified with [AppColors.primary] so all maroon elements across the entire app
+/// share the exact same canonical color (0xFF7D1238).
+const kMaroon = AppColors.primary; // 0xFF7D1238
+const kMaroonDark = AppColors.primaryDark; // 0xFF5E0D2A
+const kMaroonLight = AppColors.primary; // 0xFF7D1238
 const kBackground = Color(0xFFF5F5F5);
-const kCardBorder = Color(0xFFCC3355);
+const kCardBorder = Color(0xFFEDE1E5); // Unified with AppColors.border

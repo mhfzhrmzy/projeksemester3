@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import '../theme/auth_colors.dart';
 
 /// Circular avatar icon shown on the Login & Register screens.
-/// Displays a clean white circle with a soft natural shadow,
-/// featuring the signature maroon minimalist silhouette (circular head + curved torso).
+/// Matches the exact circular maroon profile silhouette logo
+/// (circular stroke border, solid circular head, and smooth shoulder curve)
+/// with a natural soft shadow.
 class AuthAvatarIcon extends StatelessWidget {
   final double size;
-  const AuthAvatarIcon({super.key, this.size = 74});
+  const AuthAvatarIcon({super.key, this.size = 80});
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,9 @@ class AuthAvatarIcon extends StatelessWidget {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 14,
-            offset: const Offset(0, 3),
+            offset: const Offset(0, 4),
           ),
           BoxShadow(
             color: kMaroon.withValues(alpha: 0.06),
@@ -29,10 +30,19 @@ class AuthAvatarIcon extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: CustomPaint(
-          size: Size(size, size),
-          painter: const _ProfileAvatarPainter(color: kMaroon),
+      child: ClipOval(
+        child: Image.asset(
+          'assets/images/auth_avatar.png',
+          width: size,
+          height: size,
+          fit: BoxFit.contain,
+          errorBuilder: (context, error, stackTrace) {
+            // High-precision vector fallback if asset is unavailable
+            return CustomPaint(
+              size: Size(size, size),
+              painter: const _ProfileAvatarPainter(color: kMaroon),
+            );
+          },
         ),
       ),
     );
@@ -46,52 +56,68 @@ class _ProfileAvatarPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
+    final cx = size.width / 2;
+    final cy = size.height / 2;
+    final r = size.width / 2;
+
+    final fillPaint = Paint()
       ..color = color
       ..style = PaintingStyle.fill
       ..isAntiAlias = true;
 
-    final cx = size.width / 2;
-    final cy = size.height / 2;
+    // ── 1. Background putih lingkaran ───────────────────────────
+    final bgPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+    canvas.drawCircle(Offset(cx, cy), r, bgPaint);
 
-    // ── Proporsi simetris terkalibrasi presisi terhadap lingkaran luar ──
-    // Margin seragam ~7.1px ke seluruh sisi border lingkaran (atas, bawah, kiri, kanan)
-    final headRadius = size.width * 0.21;
-    final gap = size.height * 0.055;
-    final halfW = size.width * 0.345;
-    final halfH = size.height * 0.165;
+    // ── 2. Lingkaran luar (stroke) maroon ────────────────────────
+    final strokeW = size.width * (10.0 / 176.0);
+    final strokePaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeW
+      ..isAntiAlias = true;
+    canvas.drawCircle(Offset(cx, cy), r - (strokeW / 2), strokePaint);
 
-    final figureHeight = (2 * headRadius) + gap + (2 * halfH);
+    // ── 3. Kepala (Lingkaran solid maroon) ───────────────────────
+    final headR = size.width * (33.0 / 176.0);
+    final headCenterY = size.height * (66.0 / 176.0);
+    canvas.drawCircle(Offset(cx, headCenterY), headR, fillPaint);
 
-    // Titik awal vertikal agar seluruh figur presisi di titik tengah vertikal (cy)
-    final topY = cy - (figureHeight / 2);
-    final headCenterY = topY + headRadius;
-    final bodyCenterY = topY + (2 * headRadius) + gap + halfH;
-
-    // ── 1. Kepala (Lingkaran) ───────────────────────────────────
-    canvas.drawCircle(Offset(cx, headCenterY), headRadius, paint);
-
-    // ── 2. Badan / Bahu (Lengkung horizontal simetris) ──────────
-    // Radius lengkungan agar kurva bawah sejajar harmonis dengan kurvatur lingkaran luar
-    final r = (halfW * halfW + halfH * halfH) / (2 * halfH);
-
-    final path = Path();
-    path.moveTo(cx - halfW, bodyCenterY);
-    // Lengkung atas
-    path.arcToPoint(
-      Offset(cx + halfW, bodyCenterY),
-      radius: Radius.circular(r),
-      clockwise: true,
+    // ── 4. Bahu / Torso (Kurva lengkung simetris di bagian bawah) ──
+    final innerR = r - strokeW;
+    canvas.save();
+    canvas.clipPath(
+      Path()..addOval(Rect.fromCircle(center: Offset(cx, cy), radius: innerR)),
     );
-    // Lengkung bawah kembali ke titik awal
-    path.arcToPoint(
-      Offset(cx - halfW, bodyCenterY),
-      radius: Radius.circular(r),
-      clockwise: true,
-    );
-    path.close();
 
-    canvas.drawPath(path, paint);
+    final scale = size.width / 176.0;
+    final shoulderPath = Path();
+    shoulderPath.moveTo(15.0 * scale, 160.0 * scale);
+    shoulderPath.cubicTo(
+      48.0 * scale,
+      122.0 * scale,
+      68.0 * scale,
+      110.0 * scale,
+      88.0 * scale,
+      110.0 * scale,
+    );
+    shoulderPath.cubicTo(
+      108.0 * scale,
+      110.0 * scale,
+      128.0 * scale,
+      122.0 * scale,
+      161.0 * scale,
+      160.0 * scale,
+    );
+    shoulderPath.lineTo(176.0 * scale, 176.0 * scale);
+    shoulderPath.lineTo(0.0, 176.0 * scale);
+    shoulderPath.close();
+
+    canvas.drawPath(shoulderPath, fillPaint);
+    canvas.restore();
   }
 
   @override
@@ -99,4 +125,3 @@ class _ProfileAvatarPainter extends CustomPainter {
     return oldDelegate.color != color;
   }
 }
-

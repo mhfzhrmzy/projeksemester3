@@ -25,8 +25,8 @@ class AppColors {
 
   /// Disabled / faded version of primary, used for the Submit button
   /// and the Back/Next controls when they are not actionable.
-  static Color primaryFaded = primary.withOpacity(0.35);
+  static Color primaryFaded = primary.withValues(alpha: 0.35);
 
   /// Soft shadow color used across header, cards and buttons.
-  static Color softShadow = Colors.black.withOpacity(0.08);
+  static Color softShadow = Colors.black.withValues(alpha: 0.08);
 }
