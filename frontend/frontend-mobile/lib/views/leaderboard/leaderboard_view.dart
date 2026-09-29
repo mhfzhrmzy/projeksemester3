@@ -41,17 +41,29 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   ];
 
   // Dummy data Top 3
-  final LeaderboardUser _rank1 = const LeaderboardUser(rank: 1, nama: 'Netany', score: 100);
-  final LeaderboardUser _rank2 = const LeaderboardUser(rank: 2, nama: 'Lucifer', score: 96);
+  final LeaderboardUser _rank1 = const LeaderboardUser(rank: 1, nama: 'Appip', score: 100);
+  final LeaderboardUser _rank2 = const LeaderboardUser(rank: 2, nama: 'Agus', score: 96);
   final LeaderboardUser _rank3 = const LeaderboardUser(rank: 3, nama: 'Sins', score: 90);
 
   // Dummy data rank 4 ke bawah
   final List<LeaderboardUser> _rankList = const [
     LeaderboardUser(rank: 4, nama: 'Ahmad Fauzi', score: 88),
-    LeaderboardUser(rank: 5, nama: 'Biolina Rahma', score: 85),
-    LeaderboardUser(rank: 6, nama: 'Candra Kartika', score: 82),
-    LeaderboardUser(rank: 7, nama: 'Dini Lestari', score: 79),
-    LeaderboardUser(rank: 8, nama: 'Eko Prasetyo', score: 75),
+    LeaderboardUser(rank: 5, nama: 'Biolina Rahma', score: 87),
+    LeaderboardUser(rank: 6, nama: 'Candra Kartika', score: 85),
+    LeaderboardUser(rank: 7, nama: 'Dini Lestari', score: 84),
+    LeaderboardUser(rank: 8, nama: 'Eko Prasetyo', score: 83),
+    LeaderboardUser(rank: 9, nama: 'Fajar Nugroho', score: 82),
+    LeaderboardUser(rank: 10, nama: 'Gita Saraswati', score: 80),
+    LeaderboardUser(rank: 11, nama: 'Hadi Saputra', score: 79),
+    LeaderboardUser(rank: 12, nama: 'Intan Permata', score: 78),
+    LeaderboardUser(rank: 13, nama: 'Joko Susilo', score: 77),
+    LeaderboardUser(rank: 14, nama: 'Kartika Sari', score: 75),
+    LeaderboardUser(rank: 15, nama: 'Lukman Hakim', score: 74),
+    LeaderboardUser(rank: 16, nama: 'Maya Indah', score: 73),
+    LeaderboardUser(rank: 17, nama: 'Naufal Zaki', score: 72),
+    LeaderboardUser(rank: 18, nama: 'Olivia Wijaya', score: 70),
+    LeaderboardUser(rank: 19, nama: 'Pandu Dewanata', score: 69),
+    LeaderboardUser(rank: 20, nama: 'Qori Amalia', score: 68),
   ];
 
   // User rank terpin di bawah
