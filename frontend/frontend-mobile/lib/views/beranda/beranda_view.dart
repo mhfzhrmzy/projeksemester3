@@ -7,6 +7,7 @@ import '../../widgets/custom_footer.dart';
 import '../../pretest/pretest_page.dart';
 import '../../posttest/posttest_page.dart';
 import '../materi/buka_materi_view.dart';
+import '../profile/profile_view.dart';
 import '../leaderboard/leaderboard_view.dart';
 import '../sertifikat/sertifikat_view.dart';
 
@@ -33,18 +34,20 @@ class _BerandaViewState extends State<BerandaView> {
   static const _totalMateri = 2;
   static const _totalQuiz = 4;
 
-  void _onFooterTap(int idx) {
-    setState(() => _footerIndex = idx);
-    if (idx == 1) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const LeaderboardView()),
-      );
-    } else if (idx == 2) {
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const SertifikatView()),
-      );
-    }
-  }
+  Future<void> _onFooterTap(int idx) async {
+  if (idx == 0) return;
+
+  setState(() => _footerIndex = idx);
+  final Widget tujuan = idx == 1
+      ? const LeaderboardView()
+      : const ProfileView(nama: _namaUser, kelas: _kelasUser);
+
+  await Navigator.of(context).push(
+    MaterialPageRoute(builder: (_) => tujuan),
+  );
+  if (!mounted) return;
+  setState(() => _footerIndex = 0);
+}
 
   /// Tampilkan modal pilihan aksi saat kartu materi di-tap.
   /// Navigasi dilakukan dari parent context agar tidak crash setelah pop.
