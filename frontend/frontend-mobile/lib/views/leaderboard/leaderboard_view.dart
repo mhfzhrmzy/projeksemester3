@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import '../../common/theme/app_colors.dart';
 import '../../widgets/custom_footer.dart';
 import '../beranda/beranda_view.dart';
-import '../sertifikat/sertifikat_view.dart';
+import '../profile/profile_view.dart';
 
 /// Item data siswa untuk leaderboard
 class LeaderboardUser {
@@ -18,15 +18,6 @@ class LeaderboardUser {
   });
 }
 
-/// Halaman Leaderboard (Peringkat Siswa)
-/// Sesuai desain acuan:
-/// - Header Maroon "Leaderboard" & subtitle "Akumulasi perolehan poin siswa"
-/// - White body container melengkung di bagian atas
-/// - Toggle tab [ Keseluruhan | Permateri ]
-/// - Sub-filter pill horizontal (MS Word, MS Excel, Power Point, dll) ketika Permateri aktif
-/// - Top 3 Podium (Rank 1 center/tertinggi, Rank 2 left, Rank 3 right)
-/// - Outlined list rank 4, 5, 6, 7, dst.
-/// - Pinned sticky dark maroon bar di bawah untuk posisi user saat ini ("21 Seto Son Horeg 67")
 class LeaderboardView extends StatefulWidget {
   const LeaderboardView({super.key});
 
@@ -71,7 +62,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   );
 
   void _onFooterTap(int idx) {
-    if (idx == 1) return; // sudah di Leaderboard
+    if (idx == 1) return; 
 
     if (idx == 0) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -80,7 +71,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
       );
     } else if (idx == 2) {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const SertifikatView()),
+        MaterialPageRoute(builder: (_) => const ProfileView()),
       );
     }
   }
@@ -88,7 +79,6 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Latar belakang utama putih bersih (area bawah di balik footer selalu putih)
       backgroundColor: Colors.white,
       bottomNavigationBar: CustomFooter(
         currentIndex: 1,
@@ -133,12 +123,10 @@ class _LeaderboardViewState extends State<LeaderboardView> {
               ),
             ),
 
-            // ── Konten Utama (White Container dengan Overlapping Top Maroon Strip) ──
             Expanded(
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  // Latar maroon yang overlap -10px ke atas header untuk menghilangkan garis pixel
                   Positioned(
                     top: -10,
                     left: 0,
