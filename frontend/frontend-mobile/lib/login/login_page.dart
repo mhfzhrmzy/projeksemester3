@@ -3,7 +3,6 @@ import '../common/theme/auth_colors.dart';
 import '../common/widgets/auth_header.dart';
 import '../common/widgets/auth_avatar_icon.dart';
 import '../common/widgets/auth_text_field.dart';
-import '../register/register_page.dart';
 import '../views/beranda/beranda_view.dart';
 
 class LoginPage extends StatefulWidget {
@@ -78,35 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                       hint: 'Masukkan password',
                       obscure: true,
                       controller: _passwordController,
-                    ),
-                    const SizedBox(height: 14),
-                    RichText(
-                      text: TextSpan(
-                        text: 'Apakah sudah punya akun? Jika belum ',
-                        style: const TextStyle(fontSize: 12, color: Colors.black54),
-                        children: [
-                          WidgetSpan(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => const RegisterPage(),
-                                  ),
-                                );
-                              },
-                              child: const Text(
-                                'registrasi',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: kMaroon,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                     const SizedBox(height: 20),
                     Align(
