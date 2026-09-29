@@ -7,6 +7,8 @@ import '../../widgets/custom_footer.dart';
 import '../../pretest/pretest_page.dart';
 import '../../posttest/posttest_page.dart';
 import '../materi/buka_materi_view.dart';
+import '../leaderboard/leaderboard_view.dart';
+import '../sertifikat/sertifikat_view.dart';
 
 /// Halaman Beranda / Dashboard utama setelah pengguna login.
 ///
@@ -33,13 +35,14 @@ class _BerandaViewState extends State<BerandaView> {
 
   void _onFooterTap(int idx) {
     setState(() => _footerIndex = idx);
-    // TODO: Tambahkan navigasi ke halaman Peringkat / Profil
     if (idx == 1) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Halaman Peringkat (coming soon)')));
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const LeaderboardView()),
+      );
     } else if (idx == 2) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Halaman Profil (coming soon)')));
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => const SertifikatView()),
+      );
     }
   }
 
