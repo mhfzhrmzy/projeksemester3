@@ -88,6 +88,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Latar belakang utama putih bersih (area bawah di balik footer selalu putih)
       backgroundColor: Colors.white,
       bottomNavigationBar: CustomFooter(
         currentIndex: 1,
@@ -132,297 +133,306 @@ class _LeaderboardViewState extends State<LeaderboardView> {
               ),
             ),
 
-            // ── Konten Utama (White Container dengan Curved Top Corners) ────
+            // ── Konten Utama (White Container dengan Overlapping Top Maroon Strip) ──
             Expanded(
-              child: Container(
-                transform: Matrix4.translationValues(0, -12, 0),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Latar maroon yang overlap -10px ke atas header untuk menghilangkan garis pixel
+                  Positioned(
+                    top: -10,
+                    left: 0,
+                    right: 0,
+                    height: 50,
+                    child: Container(color: AppColors.primary),
                   ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                    child: Column(
-                      children: [
-                        // ── Toggle Switch [ Keseluruhan | Permateri ] ─────────
-                        Container(
-                          height: 44,
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(
-                              color: AppColors.primary,
-                              width: 1.5,
+                  // Container putih utama
+                  Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: Column(
+                        children: [
+                          // ── Toggle Switch [ Keseluruhan | Permateri ] ─────────
+                          Container(
+                            height: 44,
+                            padding: const EdgeInsets.all(3),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(
+                                color: AppColors.primary,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                // Tab Keseluruhan
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() => _selectedTab = 0);
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _selectedTab == 0
+                                            ? AppColors.primary
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Keseluruhan',
+                                        style: TextStyle(
+                                          color: _selectedTab == 0
+                                              ? Colors.white
+                                              : AppColors.primary,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13.5,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                // Tab Permateri
+                                Expanded(
+                                  child: InkWell(
+                                    onTap: () {
+                                      setState(() => _selectedTab = 1);
+                                    },
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _selectedTab == 1
+                                            ? AppColors.primary
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Permateri',
+                                        style: TextStyle(
+                                          color: _selectedTab == 1
+                                              ? Colors.white
+                                              : AppColors.primary,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13.5,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          child: Row(
-                            children: [
-                              // Tab Keseluruhan
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() => _selectedTab = 0);
-                                  },
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _selectedTab == 0
-                                          ? AppColors.primary
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Keseluruhan',
-                                      style: TextStyle(
-                                        color: _selectedTab == 0
-                                            ? Colors.white
-                                            : AppColors.primary,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Tab Permateri
-                              Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() => _selectedTab = 1);
-                                  },
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: _selectedTab == 1
-                                          ? AppColors.primary
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Permateri',
-                                      style: TextStyle(
-                                        color: _selectedTab == 1
-                                            ? Colors.white
-                                            : AppColors.primary,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 13.5,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
 
-                        // ── Sub-Filter Pills (Muncul jika Permateri dipilih) ─
-                        if (_selectedTab == 1) ...[
-                          const SizedBox(height: 14),
-                          SizedBox(
-                            height: 32,
-                            child: ListView.separated(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: _materiList.length,
-                              separatorBuilder: (_, __) => const SizedBox(width: 8),
-                              itemBuilder: (ctx, idx) {
-                                final isSelected = idx == _selectedMateriIndex;
-                                return InkWell(
-                                  onTap: () {
-                                    setState(() => _selectedMateriIndex = idx);
-                                  },
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 14,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? AppColors.primary
-                                          : const Color(0xFFF1EFF1),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Text(
-                                      _materiList[idx],
-                                      style: TextStyle(
+                          // ── Sub-Filter Pills (Muncul jika Permateri dipilih) ─
+                          if (_selectedTab == 1) ...[
+                            const SizedBox(height: 14),
+                            SizedBox(
+                              height: 32,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _materiList.length,
+                                separatorBuilder: (_, __) => const SizedBox(width: 8),
+                                itemBuilder: (ctx, idx) {
+                                  final isSelected = idx == _selectedMateriIndex;
+                                  return InkWell(
+                                    onTap: () {
+                                      setState(() => _selectedMateriIndex = idx);
+                                    },
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 14,
+                                        vertical: 6,
+                                      ),
+                                      decoration: BoxDecoration(
                                         color: isSelected
-                                            ? Colors.white
-                                            : const Color(0xFF8D8D8D),
-                                        fontSize: 12,
-                                        fontWeight: isSelected
-                                            ? FontWeight.bold
-                                            : FontWeight.w500,
+                                            ? AppColors.primary
+                                            : const Color(0xFFF1EFF1),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(
+                                        _materiList[idx],
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : const Color(0xFF8D8D8D),
+                                          fontSize: 12,
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.w500,
+                                        ),
                                       ),
                                     ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+
+                          const SizedBox(height: 18),
+
+                          // ── Top 3 Podium Section ─────────────────────────────
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.center,
+                            child: SizedBox(
+                              height: 150,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  // Rank 2 (Left)
+                                  _PodiumBar(
+                                    user: _rank2,
+                                    barHeight: 70,
+                                    width: 84,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  // Rank 1 (Center - Tertinggi)
+                                  _PodiumBar(
+                                    user: _rank1,
+                                    barHeight: 96,
+                                    width: 90,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  // Rank 3 (Right)
+                                  _PodiumBar(
+                                    user: _rank3,
+                                    barHeight: 52,
+                                    width: 84,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // ── List Rank 4 ke bawah ────────────────────────────
+                          Expanded(
+                            child: ListView.separated(
+                              physics: const BouncingScrollPhysics(),
+                              padding: const EdgeInsets.only(bottom: 12),
+                              itemCount: _rankList.length,
+                              separatorBuilder: (_, __) => const SizedBox(height: 10),
+                              itemBuilder: (ctx, idx) {
+                                final item = _rankList[idx];
+                                return Container(
+                                  height: 46,
+                                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(
+                                      color: AppColors.primary,
+                                      width: 1.2,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '${item.rank}',
+                                        style: const TextStyle(
+                                          color: AppColors.primary,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Text(
+                                          item.nama,
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${item.score}',
+                                        style: const TextStyle(
+                                          color: AppColors.primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },
                             ),
                           ),
-                        ],
 
-                        const SizedBox(height: 18),
-
-                        // ── Top 3 Podium Section ─────────────────────────────
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.center,
-                          child: SizedBox(
-                            height: 150,
+                          // ── Pinned Current User Rank Bar ─────────────────────
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 12, top: 4),
+                            height: 48,
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                // Rank 2 (Left)
-                                _PodiumBar(
-                                  user: _rank2,
-                                  barHeight: 70,
-                                  width: 84,
+                                Text(
+                                  '${_currentUser.rank}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                                const SizedBox(width: 12),
-                                // Rank 1 (Center - Tertinggi)
-                                _PodiumBar(
-                                  user: _rank1,
-                                  barHeight: 96,
-                                  width: 90,
+                                const SizedBox(width: 18),
+                                Expanded(
+                                  child: Text(
+                                    _currentUser.nama,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
                                 ),
-                                const SizedBox(width: 12),
-                                // Rank 3 (Right)
-                                _PodiumBar(
-                                  user: _rank3,
-                                  barHeight: 52,
-                                  width: 84,
+                                Text(
+                                  '${_currentUser.score}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // ── List Rank 4 ke bawah ────────────────────────────
-                        Expanded(
-                          child: ListView.separated(
-                            physics: const BouncingScrollPhysics(),
-                            padding: const EdgeInsets.only(bottom: 12),
-                            itemCount: _rankList.length,
-                            separatorBuilder: (_, __) => const SizedBox(height: 10),
-                            itemBuilder: (ctx, idx) {
-                              final item = _rankList[idx];
-                              return Container(
-                                height: 46,
-                                padding: const EdgeInsets.symmetric(horizontal: 16),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(
-                                    color: AppColors.primary,
-                                    width: 1.2,
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      '${item.rank}',
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 16),
-                                    Expanded(
-                                      child: Text(
-                                        item.nama,
-                                        style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Text(
-                                      '${item.score}',
-                                      style: const TextStyle(
-                                        color: AppColors.primary,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-
-                        // ── Pinned Current User Rank Bar ─────────────────────
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 12, top: 4),
-                          height: 48,
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              Text(
-                                '${_currentUser.rank}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(width: 18),
-                              Expanded(
-                                child: Text(
-                                  _currentUser.nama,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                              Text(
-                                '${_currentUser.score}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ],
