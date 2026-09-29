@@ -4,6 +4,7 @@ import '../../common/theme/app_colors.dart';
 import '../../widgets/custom_footer.dart';
 import '../beranda/beranda_view.dart';
 import '../leaderboard/leaderboard_view.dart';
+import '../profile/profile_view.dart';
 
 /// Item model untuk daftar sertifikat
 class SertifikatItem {
@@ -20,13 +21,6 @@ class SertifikatItem {
   });
 }
 
-/// Halaman Sertifikat & Portofolio
-/// Sesuai desain acuan (Foto 3):
-/// - Tombol pill back `(< Back)`
-/// - Judul utama "Sertifikat & Portofolio"
-/// - Section "Upload Sertifikat Baru" dengan dropzone dashed border & icon cloud upload
-/// - Section "Daftar sertifikat" dengan card outline maroon & tombol "Unduh Sertifikat"
-/// - Bottom Navigation Bar
 class SertifikatView extends StatefulWidget {
   const SertifikatView({super.key});
 
@@ -45,13 +39,16 @@ class _SertifikatViewState extends State<SertifikatView> {
   ];
 
   void _onFooterTap(int idx) {
-    if (idx == 2) return; // sudah di Sertifikat
-
-    if (idx == 0) {
+    if (idx == 2) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const ProfileView()),
+      );
+    } else if (idx == 0) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const BerandaView()),
         (route) => false,
-      );
+      ); 
+    
     } else if (idx == 1) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const LeaderboardView()),
