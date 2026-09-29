@@ -3,6 +3,7 @@ import '../../common/theme/app_colors.dart';
 import '../../common/widgets/test_header.dart';
 import '../../models/materi_model.dart';
 import '../../widgets/custom_footer.dart';
+import '../profile/profile_view.dart';
 
 /// Halaman Buka Materi.
 ///
@@ -54,23 +55,23 @@ class _BukaMateriViewState extends State<BukaMateriView> {
     );
   }
 
-  void _onFooterTap(int idx) {
-    if (idx == 0) {
-      // Opsi 2: Kembali langsung ke Beranda via icon Beranda di footer
-      Navigator.of(context).pop();
-    } else {
-      setState(() => _footerIndex = idx);
-      if (idx == 1) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Halaman Peringkat (coming soon)')),
-        );
-      } else if (idx == 2) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Halaman Profil (coming soon)')),
-        );
-      }
-    }
+  Future<void> _onFooterTap(int idx) async {
+  if (idx == 0) {
+    Navigator.of(context).pop();
+  } else if (idx == 1) {
+    setState(() => _footerIndex = idx);
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Halaman Peringkat (coming soon)')),
+    );
+  } else if (idx == 2) {
+    setState(() => _footerIndex = idx);
+    await Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const ProfileView()),
+    );
+    if (!mounted) return;
+    setState(() => _footerIndex = 0);
   }
+}
 
   @override
   Widget build(BuildContext context) {
