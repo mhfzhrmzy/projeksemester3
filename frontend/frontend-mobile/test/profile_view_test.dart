@@ -9,7 +9,7 @@ void main() {
       const MaterialApp(home: ProfileView()),
     );
 
-    expect(find.text('Seto Aji Son Horeg'), findsOneWidget);
+    expect(find.text('Seto Son Horeg'), findsOneWidget);
     expect(find.text('Kelas 10 TKJ - SMKN 2 Jember'), findsOneWidget);
     expect(find.text('S'), findsOneWidget);
     expect(find.text('Pengaturan akun siswa'), findsOneWidget);

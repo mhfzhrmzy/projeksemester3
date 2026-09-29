@@ -28,7 +28,7 @@ class ProfileView extends StatelessWidget {
 
   const ProfileView({
     super.key,
-    this.nama = 'Seto Aji Son Horeg',
+    this.nama = 'Seto Son Horeg',
     this.kelas = 'Kelas 10 TKJ - SMKN 2 Jember',
   });
 

@@ -29,7 +29,7 @@ class _BerandaViewState extends State<BerandaView> {
   int _footerIndex = 0;
 
   // ── Dummy data profil pengguna (ganti dengan data dari API/auth) ─────────
-  static const _namaUser = 'Seto Aji Son Horeg';
+  static const _namaUser = 'Seto Son Horeg';
   static const _kelasUser = 'Kelas 10 TKJ - SMKN 2 Jember';
   static const _totalMateri = 2;
   static const _totalQuiz = 4;

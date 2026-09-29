@@ -12,7 +12,7 @@ void main() {
 
     // Verifikasi teks di header profil
     expect(find.text('Halo, Seto 👋'), findsOneWidget);
-    expect(find.text('Seto Aji Son Horeg'), findsOneWidget);
+    expect(find.text('Seto Son Horeg'), findsOneWidget);
     expect(find.text('Kelas 10 TKJ - SMKN 2 Jember'), findsOneWidget);
 
     // Verifikasi card statistik
