@@ -45,9 +45,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: [
             const AuthHeader(title: 'Login'),
-            const SizedBox(height: 30),
+            const SizedBox(height: 22),
             const AuthAvatarIcon(),
-            const SizedBox(height: 28),
+            const SizedBox(height: 22),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: hp),
               child: Container(

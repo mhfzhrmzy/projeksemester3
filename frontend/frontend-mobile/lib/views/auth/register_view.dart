@@ -44,9 +44,9 @@ class _RegisterViewState extends State<RegisterView> {
         child: Column(
           children: [
             const AuthHeader(title: 'Registrasi'),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             const AuthAvatarIcon(),
-            const SizedBox(height: 24),
+            const SizedBox(height: 22),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
