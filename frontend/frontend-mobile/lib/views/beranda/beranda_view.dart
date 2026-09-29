@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../common/theme/app_colors.dart';
 import '../../data/materi_data.dart';
 import '../../models/materi_model.dart';
@@ -79,10 +80,13 @@ class _BerandaViewState extends State<BerandaView> {
         onTap: _onFooterTap,
       ),
       body: SafeArea(
+        // top: false agar header merah maroon full-bleed ke atas layar di belakang
+        // status bar (ikon baterai, jam, sinyal), sama seperti pada Pre-Test & Post-Test
+        top: false,
         bottom: false, // footer menangani safe area bawah sendiri
         child: Column(
           children: [
-            // ── Header Profil — hp dihitung sendiri di dalam widget ─────────
+            // ── Header Profil — hp dan status bar dihitung sendiri di dalam widget ──
             const _ProfileHeader(nama: _namaUser, kelas: _kelasUser),
 
             // ── Konten Scrollable ─────────────────────────────────────────
@@ -94,41 +98,51 @@ class _BerandaViewState extends State<BerandaView> {
                   final double hp =
                       (constraints.maxWidth * 0.075).clamp(22.0, 40.0);
                   return SingleChildScrollView(
+                    clipBehavior: Clip.none,
                     physics: const BouncingScrollPhysics(),
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(hp, 0, hp, 24),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Card statistik
-                          const _StatsCard(
-                            totalMateri: _totalMateri,
-                            totalQuiz: _totalQuiz,
+                          // Card statistik — berada persis di tengah antara header maroon dan konten
+                          SizedBox(
+                            height: 36,
+                            child: OverflowBox(
+                              minHeight: 72,
+                              maxHeight: 72,
+                              alignment: Alignment.bottomCenter,
+                              child: const _StatsCard(
+                                totalMateri: _totalMateri,
+                                totalQuiz: _totalQuiz,
+                              ),
+                            ),
                           ),
-                          const SizedBox(height: 24),
+                          const SizedBox(height: 14),
 
                           // Label section materi
                           Text(
                             'Materi Tersedia',
                             style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey.shade800,
                             ),
                           ),
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 10),
 
                           // Grid materi
                           GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
                             itemCount: dummyMateriList.length,
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: constraints.maxWidth > 600 ? 4 : 2,
                               mainAxisSpacing: 14,
                               crossAxisSpacing: 14,
-                              childAspectRatio: 0.88, // sedikit lebih tinggi dari lebar
+                              childAspectRatio: 0.84, // sedikit lebih proporsional dan selaras
                             ),
                             itemBuilder: (gridCtx, i) {
                               final materi = dummyMateriList[i];
@@ -154,105 +168,115 @@ class _BerandaViewState extends State<BerandaView> {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Header Profil
+// Header Profil (Full bleed sampai atas status bar, sama seperti TestHeader)
 // ────────────────────────────────────────────────────────────────────────────
 class _ProfileHeader extends StatelessWidget {
   final String nama;
   final String kelas;
 
-  // Tidak menerima hp dari luar — dihitung sendiri agar selalu fresh
   const _ProfileHeader({required this.nama, required this.kelas});
 
   @override
   Widget build(BuildContext context) {
-    // Hitung hp di sini agar selalu pakai context widget ini sendiri
+    final mediaQuery = MediaQuery.of(context);
+    // Tinggi riil status bar (tempat ikon baterai, sinyal, jam berada)
+    final double statusBarHeight = mediaQuery.viewPadding.top;
     final double hp =
-        (MediaQuery.of(context).size.width * 0.075).clamp(22.0, 40.0);
+        (mediaQuery.size.width * 0.075).clamp(22.0, 40.0);
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.fromLTRB(hp, 18, hp, 36),
-      decoration: const BoxDecoration(
-        color: AppColors.primary,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(28),
-          bottomRight: Radius.circular(28),
-        ),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      // Ikon status bar (baterai, jam, sinyal) putih terang agar kontras
+      // jelas di atas warna merah maroon, dengan statusBar transparan
+      value: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Salam singkat
-          Text(
-            'Halo, ${nama.split(' ').first} 👋',
-            style: const TextStyle(
-              color: Colors.white70,
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+      child: Material(
+        elevation: 6,
+        shadowColor: AppColors.softShadow,
+        color: AppColors.primary,
+        clipBehavior: Clip.antiAlias,
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(36),
+          bottomRight: Radius.circular(36),
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(
+            // Bersihkan baris status bar (ikon baterai dsb) lalu beri jarak aman
+            // agar teks dan konten tidak bertabrakan dengan ikon baterai
+            top: statusBarHeight + 18,
+            bottom: 52, // 16dp jarak ke kartu + 36dp setengah tinggi kartu statistik
+            left: hp,
+            right: hp,
           ),
-          const SizedBox(height: 12),
-
-          // Baris avatar + nama + kelas
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Avatar profil clean white dengan corner radius 20 & inisial maroon
-              Container(
-                width: 56,
-                height: 56,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.12),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Text(
-                    nama.isNotEmpty ? nama[0].toUpperCase() : 'U',
-                    style: const TextStyle(
-                      color: AppColors.primary,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+              // Salam singkat
+              Text(
+                'Halo, ${nama.split(' ').first} 👋',
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(width: 14),
+              const SizedBox(height: 12),
 
-              // Nama & kelas
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      nama,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+              // Baris avatar + nama + kelas
+              Row(
+                children: [
+                  // Avatar profil rounded kotak berlatar dusty rose lembut & inisial dark maroon sesuai gambar
+                  Container(
+                    width: 56,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFBA7D8E),
+                      borderRadius: BorderRadius.circular(18),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      kelas,
-                      style: const TextStyle(
-                        color: Colors.white70,
-                        fontSize: 12,
+                    child: Center(
+                      child: Text(
+                        nama.isNotEmpty ? nama[0].toUpperCase() : 'U',
+                        style: const TextStyle(
+                          color: AppColors.primaryDark,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 14),
+
+                  // Nama & kelas
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          nama,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          kelas,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -269,35 +293,31 @@ class _StatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Transform.translate(
-      offset: const Offset(0, -20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.07),
-              blurRadius: 16,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: IntrinsicHeight(
-          child: Row(
-            children: [
-              _StatItem(value: '$totalMateri', label: 'Materi'),
-              VerticalDivider(
-                width: 1,
-                thickness: 1,
-                color: Colors.grey.shade200,
-                indent: 20,
-                endIndent: 20,
-              ),
-              _StatItem(value: '$totalQuiz', label: 'Total Quiz'),
-            ],
+    return Container(
+      height: 72,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
-        ),
+        ],
+      ),
+      child: Row(
+        children: [
+          _StatItem(value: '$totalMateri', label: 'Materi'),
+          VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: Colors.grey.shade200,
+            indent: 14,
+            endIndent: 14,
+          ),
+          _StatItem(value: '$totalQuiz', label: 'Total Quiz'),
+        ],
       ),
     );
   }
@@ -312,28 +332,27 @@ class _StatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: AppColors.primary,
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey.shade500,
-              ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey.shade500,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
