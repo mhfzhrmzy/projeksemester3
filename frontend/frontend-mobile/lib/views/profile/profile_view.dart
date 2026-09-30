@@ -123,71 +123,76 @@ class ProfileView extends StatelessWidget {
         currentIndex: 2,
         onTap: (idx) => _onFooterTap(context, idx),
       ),
-      body: SafeArea(
-        // top: false agar header maroon full-bleed ke belakang status bar,
-        // sama seperti Beranda / Pre-Test / Post-Test.
-        top: false,
-        bottom: false, // footer menangani safe area bawah sendiri
-        child: Column(
-          children: [
-            _ProfileHeader(
-              nama: nama,
-              kelas: kelas,
-              avatarColor: _avatarOlive,
-            ),
-            Expanded(
-              child: LayoutBuilder(
-                builder: (ctx, constraints) {
-                  final double hp =
-                      (constraints.maxWidth * 0.075).clamp(22.0, 40.0);
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints:
-                          BoxConstraints(minHeight: constraints.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(hp, 0, hp, 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              const Spacer(flex: 3),
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.light.copyWith(
+          statusBarColor: Colors.transparent,
+        ),
+        child: SafeArea(
+          // top: false agar header maroon full-bleed ke belakang status bar,
+          // sama seperti Beranda / Pre-Test / Post-Test.
+          top: false,
+          bottom: false, // footer menangani safe area bawah sendiri
+          child: Column(
+            children: [
+              _ProfileHeader(
+                nama: nama,
+                kelas: kelas,
+                avatarColor: _avatarOlive,
+              ),
+              Expanded(
+                child: LayoutBuilder(
+                  builder: (ctx, constraints) {
+                    final double hp =
+                        (constraints.maxWidth * 0.075).clamp(22.0, 40.0);
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints:
+                            BoxConstraints(minHeight: constraints.maxHeight),
+                        child: IntrinsicHeight(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(hp, 0, hp, 20),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                const Spacer(flex: 3),
 
-                              // ── Menu utama ───────────────────────────────
-                              _ProfileMenuButton(
-                                label: 'Pengaturan akun siswa',
-                                filled: true,
-                                onTap: () => _showComingSoon(
-                                    context, 'Halaman Pengaturan akun siswa'),
-                              ),
-                              const SizedBox(height: 14),
-                              _ProfileMenuButton(
-                                label: 'Sertifikat & Portofolio',
-                                filled: false,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (_) => const SertifikatView()),
+                                // ── Menu utama ───────────────────────────────
+                                _ProfileMenuButton(
+                                  label: 'Pengaturan akun siswa',
+                                  filled: true,
+                                  onTap: () => _showComingSoon(
+                                      context, 'Halaman Pengaturan akun siswa'),
                                 ),
-                              ),
+                                const SizedBox(height: 14),
+                                _ProfileMenuButton(
+                                  label: 'Sertifikat & Portofolio',
+                                  filled: false,
+                                  onTap: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (_) => const SertifikatView()),
+                                  ),
+                                ),
 
-                              const Spacer(flex: 4),
+                                const Spacer(flex: 4),
 
-                              // ── Keluar Akun ──────────────────────────────
-                              _LogoutButton(
-                                backgroundColor: _logoutBackground,
-                                borderColor: _logoutBorder,
-                                onTap: () => _confirmLogout(context),
-                              ),
-                            ],
+                                // ── Keluar Akun ──────────────────────────────
+                                _LogoutButton(
+                                  backgroundColor: _logoutBackground,
+                                  borderColor: _logoutBorder,
+                                  onTap: () => _confirmLogout(context),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

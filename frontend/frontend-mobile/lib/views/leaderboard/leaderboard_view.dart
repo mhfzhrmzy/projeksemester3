@@ -275,11 +275,11 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                           style: TextStyle(
                                             color: isSelected
                                                 ? Colors.white
-                                                : const Color(0xFF8D8D8D),
+                                                : AppColors.primary.withValues(alpha: 0.65),
                                             fontSize: 12,
                                             fontWeight: isSelected
                                                 ? FontWeight.bold
-                                                : FontWeight.w500,
+                                                : FontWeight.w600,
                                           ),
                                         ),
                                       ),
@@ -363,9 +363,9 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                           child: Text(
                                             item.nama,
                                             style: const TextStyle(
-                                              color: Colors.black87,
+                                              color: AppColors.primary,
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -460,7 +460,7 @@ class _PodiumBar extends StatelessWidget {
             user.nama,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              color: Colors.black87,
+              color: AppColors.primary,
               fontSize: 12.5,
               fontWeight: FontWeight.bold,
             ),

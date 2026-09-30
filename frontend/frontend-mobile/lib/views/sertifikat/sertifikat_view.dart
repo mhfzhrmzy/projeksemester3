@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../common/theme/app_colors.dart';
 import '../../widgets/custom_footer.dart';
 import '../beranda/beranda_view.dart';
@@ -130,13 +131,26 @@ class _SertifikatViewState extends State<SertifikatView> {
         currentIndex: 2,
         onTap: _onFooterTap,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark.copyWith(
+          statusBarColor: Colors.transparent,
+        ),
+        child: SafeArea(
+          // top: true agar konten di bawah status bar, bottom: false karena footer menangani safe area sendiri
+          // sama seperti beranda, posttest, dan pretest pada safe area kiri dan kanannya
+          bottom: false,
+          child: LayoutBuilder(
+            builder: (ctx, constraints) {
+              // Padding horizontal proporsional (7.5% lebar layar, clamp 22–40)
+              // sama persis dengan yang dipakai di Pre-Test, Post-Test, dan Beranda
+              final double hp =
+                  (constraints.maxWidth * 0.075).clamp(22.0, 40.0);
+              return SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                padding: EdgeInsets.fromLTRB(hp, 16, hp, 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
               // ── Tombol Back Pill ───────────────────────────────────────────
               InkWell(
                 onTap: () {
@@ -196,12 +210,12 @@ class _SertifikatViewState extends State<SertifikatView> {
               const SizedBox(height: 24),
 
               // ── Section 1: Upload Sertifikat Baru ──────────────────────────
-              Text(
+              const Text(
                 'Upload Sertifikat Baru',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade900,
+                  color: AppColors.primary,
                 ),
               ),
 
@@ -225,13 +239,13 @@ class _SertifikatViewState extends State<SertifikatView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.cloud_upload_outlined,
                           size: 44,
                           color: AppColors.primary,
                         ),
-                        SizedBox(height: 10),
-                        Text(
+                        const SizedBox(height: 10),
+                        const Text(
                           'Upload File Disini',
                           style: TextStyle(
                             fontSize: 14.5,
@@ -239,12 +253,12 @@ class _SertifikatViewState extends State<SertifikatView> {
                             color: AppColors.primary,
                           ),
                         ),
-                        SizedBox(height: 6),
+                        const SizedBox(height: 6),
                         Text(
                           '(format PDF, PNG, JPG maks 5MB).',
                           style: TextStyle(
                             fontSize: 11.5,
-                            color: Colors.grey,
+                            color: AppColors.primary.withValues(alpha: 0.6),
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -257,12 +271,12 @@ class _SertifikatViewState extends State<SertifikatView> {
               const SizedBox(height: 28),
 
               // ── Section 2: Daftar sertifikat ──────────────────────────────
-              Text(
+              const Text(
                 'Daftar sertifikat',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey.shade900,
+                  color: AppColors.primary,
                 ),
               ),
 
@@ -301,7 +315,7 @@ class _SertifikatViewState extends State<SertifikatView> {
                         Text(
                           item.judul,
                           style: const TextStyle(
-                            color: Colors.black87,
+                            color: AppColors.primary,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -310,7 +324,7 @@ class _SertifikatViewState extends State<SertifikatView> {
                         Text(
                           item.tanggalTerbit,
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.primary.withValues(alpha: 0.65),
                             fontSize: 12,
                           ),
                         ),
@@ -342,7 +356,10 @@ class _SertifikatViewState extends State<SertifikatView> {
                   );
                 },
               ),
-            ],
+                  ],
+                ),
+              );
+            },
           ),
         ),
       ),

@@ -9,7 +9,6 @@ import '../../posttest/posttest_page.dart';
 import '../materi/buka_materi_view.dart';
 import '../profile/profile_view.dart';
 import '../leaderboard/leaderboard_view.dart';
-import '../sertifikat/sertifikat_view.dart';
 
 /// Halaman Beranda / Dashboard utama setelah pengguna login.
 ///
@@ -112,13 +111,13 @@ class _BerandaViewState extends State<BerandaView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Card statistik — berada persis di tengah antara header maroon dan konten
-                          SizedBox(
+                          const SizedBox(
                             height: 36,
                             child: OverflowBox(
                               minHeight: 72,
                               maxHeight: 72,
                               alignment: Alignment.bottomCenter,
-                              child: const _StatsCard(
+                              child: _StatsCard(
                                 totalMateri: _totalMateri,
                                 totalQuiz: _totalQuiz,
                               ),
@@ -127,12 +126,12 @@ class _BerandaViewState extends State<BerandaView> {
                           const SizedBox(height: 14),
 
                           // Label section materi
-                          Text(
+                          const Text(
                             'Materi Tersedia',
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: Colors.grey.shade800,
+                              color: AppColors.primary,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -454,8 +453,8 @@ class _MateriCard extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 9,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.primary,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
