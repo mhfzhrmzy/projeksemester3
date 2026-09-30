@@ -344,28 +344,35 @@ class _ProfileMenuButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final BorderRadius radius = BorderRadius.circular(12);
 
-    return Material(
-      color: filled ? AppColors.primary : Colors.white,
-      borderRadius: radius,
-      child: InkWell(
-        onTap: onTap,
+    return SizedBox(
+      width: double.infinity,
+      height: 48,
+      child: Material(
+        color: filled ? AppColors.primary : Colors.white,
         borderRadius: radius,
-        child: Container(
-          height: 48,
-          alignment: Alignment.centerLeft,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          decoration: BoxDecoration(
-            borderRadius: radius,
-            border: filled
-                ? null
-                : Border.all(color: AppColors.primary, width: 1.2),
-          ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: filled ? Colors.white : AppColors.primary,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: radius,
+          child: Container(
+            width: double.infinity,
+            height: 48,
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: radius,
+              border: Border.all(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
+            ),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: filled ? Colors.white : AppColors.primary,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

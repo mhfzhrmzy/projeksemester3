@@ -144,6 +144,22 @@ class _SertifikatViewState extends State<SertifikatView> {
       ),
       builder: (ctx) => StatefulBuilder(
         builder: (modalCtx, setModalState) {
+          final now = DateTime.now();
+          final today = DateTime(now.year, now.month, now.day);
+          final oneYearAgo = DateTime(now.year - 1, now.month, now.day);
+          final twoYearsAgo = DateTime(now.year - 2, now.month, now.day);
+
+          bool isSameDay(DateTime? a, DateTime b) {
+            if (a == null) return false;
+            return a.year == b.year && a.month == b.month && a.day == b.day;
+          }
+
+          final bool isAllSelected = tempStart == null && tempEnd == null;
+          final bool isOneYearSelected =
+              isSameDay(tempStart, oneYearAgo) && isSameDay(tempEnd, today);
+          final bool isTwoYearsSelected =
+              isSameDay(tempStart, twoYearsAgo) && isSameDay(tempEnd, today);
+
           return SafeArea(
             child: Padding(
               padding: EdgeInsets.only(
@@ -193,7 +209,7 @@ class _SertifikatViewState extends State<SertifikatView> {
                           onTap: () async {
                             final picked = await showDatePicker(
                               context: modalCtx,
-                              initialDate: tempStart ?? DateTime(2026, 3, 1),
+                              initialDate: tempStart ?? today,
                               firstDate: DateTime(2020),
                               lastDate: DateTime(2030),
                               builder: _themeDatePicker,
@@ -267,7 +283,7 @@ class _SertifikatViewState extends State<SertifikatView> {
                           onTap: () async {
                             final picked = await showDatePicker(
                               context: modalCtx,
-                              initialDate: tempEnd ?? tempStart ?? DateTime(2026, 3, 12),
+                              initialDate: tempEnd ?? tempStart ?? today,
                               firstDate: tempStart ?? DateTime(2020),
                               lastDate: DateTime(2030),
                               builder: _themeDatePicker,
@@ -346,8 +362,8 @@ class _SertifikatViewState extends State<SertifikatView> {
                         initialDateRange: (tempStart != null && tempEnd != null)
                             ? DateTimeRange(start: tempStart!, end: tempEnd!)
                             : DateTimeRange(
-                                start: DateTime(2026, 3, 1),
-                                end: DateTime(2026, 3, 31),
+                                start: oneYearAgo,
+                                end: today,
                               ),
                         builder: _themeDatePicker,
                       );
@@ -384,11 +400,11 @@ class _SertifikatViewState extends State<SertifikatView> {
                     children: [
                       ActionChip(
                         label: const Text('Semua'),
-                        backgroundColor: (tempStart == null && tempEnd == null)
+                        backgroundColor: isAllSelected
                             ? AppColors.primary
                             : const Color(0xFFF6EFF1),
                         labelStyle: TextStyle(
-                          color: (tempStart == null && tempEnd == null)
+                          color: isAllSelected
                               ? Colors.white
                               : AppColors.primary,
                           fontSize: 11.5,
@@ -402,14 +418,12 @@ class _SertifikatViewState extends State<SertifikatView> {
                         },
                       ),
                       ActionChip(
-                        label: const Text('1 - 12 Maret 2026'),
-                        backgroundColor: (tempStart == DateTime(2026, 3, 1) &&
-                                tempEnd == DateTime(2026, 3, 12))
+                        label: const Text('1 Tahun'),
+                        backgroundColor: isOneYearSelected
                             ? AppColors.primary
                             : const Color(0xFFF6EFF1),
                         labelStyle: TextStyle(
-                          color: (tempStart == DateTime(2026, 3, 1) &&
-                                  tempEnd == DateTime(2026, 3, 12))
+                          color: isOneYearSelected
                               ? Colors.white
                               : AppColors.primary,
                           fontSize: 11.5,
@@ -417,20 +431,18 @@ class _SertifikatViewState extends State<SertifikatView> {
                         ),
                         onPressed: () {
                           setModalState(() {
-                            tempStart = DateTime(2026, 3, 1);
-                            tempEnd = DateTime(2026, 3, 12);
+                            tempStart = oneYearAgo;
+                            tempEnd = today;
                           });
                         },
                       ),
                       ActionChip(
-                        label: const Text('Bulan Maret 2026'),
-                        backgroundColor: (tempStart == DateTime(2026, 3, 1) &&
-                                tempEnd == DateTime(2026, 3, 31))
+                        label: const Text('2 Tahun'),
+                        backgroundColor: isTwoYearsSelected
                             ? AppColors.primary
                             : const Color(0xFFF6EFF1),
                         labelStyle: TextStyle(
-                          color: (tempStart == DateTime(2026, 3, 1) &&
-                                  tempEnd == DateTime(2026, 3, 31))
+                          color: isTwoYearsSelected
                               ? Colors.white
                               : AppColors.primary,
                           fontSize: 11.5,
@@ -438,8 +450,8 @@ class _SertifikatViewState extends State<SertifikatView> {
                         ),
                         onPressed: () {
                           setModalState(() {
-                            tempStart = DateTime(2026, 3, 1);
-                            tempEnd = DateTime(2026, 3, 31);
+                            tempStart = twoYearsAgo;
+                            tempEnd = today;
                           });
                         },
                       ),
