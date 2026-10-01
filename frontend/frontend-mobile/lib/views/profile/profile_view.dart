@@ -33,7 +33,7 @@ class ProfileView extends StatelessWidget {
   });
 
   // ── Warna khusus halaman Profil (belum ada di AppColors) ─────────────────
-  static const Color _avatarOlive = Color(0xFF76832F);
+  static const Color _avatarBg = Color(0xFFBA7D8E);
   static const Color _logoutBackground = Color(0xFFFFF0F1);
   static const Color _logoutBorder = Color(0xFFF3C4CB);
 
@@ -137,7 +137,7 @@ class ProfileView extends StatelessWidget {
               _ProfileHeader(
                 nama: nama,
                 kelas: kelas,
-                avatarColor: _avatarOlive,
+                avatarColor: _avatarBg,
               ),
               Expanded(
                 child: LayoutBuilder(
@@ -210,7 +210,7 @@ class _ProfileHeader extends StatelessWidget {
   const _ProfileHeader({
     required this.nama,
     required this.kelas,
-    required this.avatarColor,
+    this.avatarColor = const Color(0xFFBA7D8E),
   });
 
   @override
@@ -255,7 +255,7 @@ class _ProfileHeader extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  // Avatar squircle olive dengan inisial
+                  // Avatar profil rounded kotak berlatar dusty rose lembut & inisial dark maroon sesuai tampilan beranda
                   Container(
                     width: 56,
                     height: 56,
@@ -267,9 +267,9 @@ class _ProfileHeader extends StatelessWidget {
                       child: Text(
                         nama.isNotEmpty ? nama[0].toUpperCase() : 'U',
                         style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 26,
-                          fontWeight: FontWeight.w600,
+                          color: AppColors.primaryDark,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
@@ -283,7 +283,7 @@ class _ProfileHeader extends StatelessWidget {
                           nama,
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 17,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                           maxLines: 1,
@@ -293,8 +293,8 @@ class _ProfileHeader extends StatelessWidget {
                         Text(
                           kelas,
                           style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
+                            color: Colors.white70,
+                            fontSize: 12,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
