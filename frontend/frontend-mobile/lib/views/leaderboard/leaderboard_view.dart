@@ -270,7 +270,7 @@ class _LeaderboardViewState extends State<LeaderboardView> {
                                               : const Color(0xFFF1EFF1),
                                           borderRadius: BorderRadius.circular(8),
                                         ),
-                                        child: Text(
+               2                         child: Text(
                                           _materiList[idx],
                                           style: TextStyle(
                                             color: isSelected
