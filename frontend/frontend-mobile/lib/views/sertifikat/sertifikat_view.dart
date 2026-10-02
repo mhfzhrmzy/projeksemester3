@@ -5,6 +5,7 @@ import '../../widgets/custom_footer.dart';
 import '../beranda/beranda_view.dart';
 import '../leaderboard/leaderboard_view.dart';
 import '../profile/profile_view.dart';
+import 'upload_sertifikat_view.dart';
 
 /// Item model untuk daftar sertifikat
 class SertifikatItem {
@@ -24,28 +25,39 @@ class SertifikatItem {
 }
 
 class SertifikatView extends StatefulWidget {
-  const SertifikatView({super.key});
+  /// Daftar sertifikat awal – bisa dioper dari UploadSertifikatView
+  /// setelah operasi CRUD agar data tetap sinkron.
+  final List<SertifikatItem>? initialDaftar;
+
+  const SertifikatView({super.key, this.initialDaftar});
 
   @override
   State<SertifikatView> createState() => _SertifikatViewState();
 }
 
 class _SertifikatViewState extends State<SertifikatView> {
-  // Dummy daftar sertifikat (beberapa item sesuai referensi)
-  final List<SertifikatItem> _daftarSertifikat = [
-    SertifikatItem(
-      label: 'Sertifikat',
-      judul: 'Dasar Phyton',
-      tanggalTerbit: 'Diterbitkan pada: 12 maret 2026',
-      tanggal: DateTime(2026, 3, 12),
-    ),
-    SertifikatItem(
-      label: 'Sertifikat',
-      judul: 'Dasar Phyton',
-      tanggalTerbit: 'Diterbitkan pada: 01 maret 2026',
-      tanggal: DateTime(2026, 3, 1),
-    ),
-  ];
+  // Daftar sertifikat – diisi dari initialDaftar jika ada, atau dummy data.
+  late List<SertifikatItem> _daftarSertifikat;
+
+  @override
+  void initState() {
+    super.initState();
+    _daftarSertifikat = widget.initialDaftar ??
+        [
+          SertifikatItem(
+            label: 'Sertifikat',
+            judul: 'Dasar Phyton',
+            tanggalTerbit: 'Diterbitkan pada: 12 Mar 2026',
+            tanggal: DateTime(2026, 3, 12),
+          ),
+          SertifikatItem(
+            label: 'Sertifikat',
+            judul: 'Dasar Phyton',
+            tanggalTerbit: 'Diterbitkan pada: 01 Mar 2026',
+            tanggal: DateTime(2026, 3, 1),
+          ),
+        ];
+  }
 
   // State rentang tanggal terpilih (dari tanggal X sampai tanggal Y)
   DateTime? _startDate;
@@ -91,17 +103,19 @@ class _SertifikatViewState extends State<SertifikatView> {
     }
   }
 
-  /// Placeholder navigasi menuju halaman CRUD sertifikat
+  /// Navigasi ke halaman Form Upload Sertifikat Baru (CRUD)
   void _handleUploadNavigation() {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(
-          content: Text('Menuju halaman upload/CRUD sertifikat (placeholder)'),
-          backgroundColor: AppColors.primary,
-          duration: Duration(seconds: 2),
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => UploadSertifikatView(
+          daftarSertifikat: List.from(_daftarSertifikat),
+          onDaftarChanged: (updated) {
+            // Callback ini tidak akan dipanggil karena sudah pindah halaman,
+            // tapi tetap disediakan untuk kebutuhan future.
+          },
         ),
-      );
+      ),
+    );
   }
 
   void _handleDownload(SertifikatItem item) {
