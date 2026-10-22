@@ -49,7 +49,7 @@ class _BukaMateriViewState extends State<BukaMateriView> {
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('${widget.materi.judul} selesai dipelajari! 🎉'),
+        content: Text('${widget.materi.judul} selesai dipelajari!'),
         backgroundColor: WarnaAplikasi.utama,
       ),
     );
