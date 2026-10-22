@@ -1,106 +1,100 @@
 # Pre-Test & Post-Test Dasar Python (Flutter — Frontend Only)
 
-Implementasi frontend Flutter untuk halaman **Pre-Test** dan **Post-Test**
-berdasarkan gambar referensi `Pretest.png` dan `Postest.png`.
+Aplikasi Flutter frontend untuk halaman **Pre-Test**, **Post-Test**, **Materi**,
+**Sertifikat**, **Leaderboard**, dan **Profil** untuk siswa SMK Kelas 10 TKJ.
 
 Murni frontend: **tidak ada backend, API, database, autentikasi, atau
-penyimpanan hasil ke server**. Semua state (jawaban terpilih & nomor soal
-aktif) disimpan sementara di memory menggunakan `StatefulWidget` + `setState`.
+penyimpanan hasil ke server**. Semua state disimpan sementara di memory
+menggunakan `StatefulWidget` + `setState`.
 
-## Struktur folder
+---
+
+## Struktur Folder (Feature-First)
 
 ```
 lib/
-├── main.dart                     # Entry point + menu untuk membuka Pre-Test / Post-Test
-├── models/
-│   └── question.dart             # Model data soal (question, options, correctAnswerIndex, code)
-├── data/
-│   ├── pretest_data.dart         # 20 soal dummy untuk Pre-Test
-│   └── posttest_data.dart        # 20 soal dummy untuk Post-Test (beberapa berisi kode Python)
-├── theme/
-│   └── app_colors.dart           # Palet warna (maroon primary, selected, dsb)
-├── screens/
-│   └── test_page.dart            # Halaman utama Pre-Test/Post-Test (reusable), state management
-└── widgets/
-    ├── test_header.dart          # Header maroon fixed, rounded bottom, shadow
-    ├── audio_timer_row.dart      # Row "Play Audio" (dummy) + "30 Detik" (dummy)
-    ├── question_card.dart        # Card soal, auto-height, mendukung code block
-    ├── answer_option.dart        # Card pilihan jawaban A/B/C/D, state selected/unselected
-    ├── question_navigation.dart  # Back / Soal X/Y / Next, disabled di ujung
-    └── submit_button.dart        # Tombol Submit, disabled sampai semua soal terjawab
+├── main.dart                              # Entry point (hanya runApp)
+├── aplikasi/
+│   ├── aplikasi.dart                      # Root MaterialApp + tema
+│   └── tema_aplikasi.dart                 # ThemeData & NoTransitionsBuilder
+├── inti/
+│   ├── konstanta/
+│   │   └── warna_aplikasi.dart            # Palet warna terpusat
+│   └── widgets/
+│       └── navigasi_bawah.dart            # Footer navigasi 3-tab
+└── fitur/
+    ├── autentikasi/
+    │   ├── views/    (login_view, register_view)
+    │   └── widgets/  (header, avatar, kolom_teks)
+    ├── beranda/
+    │   └── views/    (beranda_view — dashboard utama)
+    ├── materi/
+    │   ├── data/     (data_materi — dummy data)
+    │   ├── models/   (model_materi)
+    │   └── views/    (buka_materi_view)
+    ├── mesin_tes/
+    │   ├── models/   (soal)
+    │   ├── views/    (tes_view — reusable test engine)
+    │   └── widgets/  (header_tes, kartu_soal, opsi_jawaban, dll.)
+    ├── pretest/      (pretest_data, pretest_view)
+    ├── posttest/     (posttest_data, posttest_view)
+    ├── papan_peringkat/
+    │   ├── models/   (pengguna_peringkat)
+    │   ├── views/    (papan_peringkat_view)
+    │   └── widgets/  (batang_podium)
+    ├── profil/
+    │   └── views/    (profil_view)
+    └── sertifikat/
+        ├── models/   (item_sertifikat)
+        └── views/    (sertifikat_view, upload_sertifikat_view)
 ```
 
-`TestPage` adalah widget reusable: dipakai baik untuk Pre-Test maupun
-Post-Test, hanya berbeda `title` dan `questions` yang di-pass sebagai
-parameter — sesuai poin 11 (reusable UI, data dummy berbeda).
+---
 
-## Fitur yang diimplementasikan
+## Fitur
 
-- Header maroon fixed dengan sudut bawah rounded besar + shadow halus.
-- Row "Play Audio" (dummy, tanpa audio asli) dan "30 Detik" (dummy timer UI),
-  memakai Material Icons (`Icons.volume_up`, `Icons.timer_outlined`).
-- Card soal dengan tinggi otomatis (tidak fixed height) — teks panjang atau
-  kode Python (ditampilkan dalam code block monospace yang bisa discroll
-  horizontal) akan membuat card bertambah tinggi secara otomatis.
-- 4 pilihan jawaban berbentuk card:
-  - Belum dipilih → background putih, border/shadow halus, teks maroon.
-  - Dipilih → background berubah warna (maroon muda), hanya satu jawaban
-    aktif per soal, memilih ulang otomatis membatalkan pilihan sebelumnya.
-- Navigasi soal (Back / Soal X/20 / Next):
-  - Back disabled di soal pertama.
-  - Next disabled di soal terakhir.
-  - Jawaban tiap soal tetap tersimpan saat pindah maju/mundur (state
-    `List<int?> selectedAnswers` di `TestPage`).
-- Tombol Submit full-width, maroon, disabled (warna pudar, tidak bisa
-  ditekan) sampai seluruh 20 soal terjawab; aktif dan menampilkan dialog
-  "Jawaban berhasil dikirim" setelah semua terjawab.
-- Layout: `Scaffold > SafeArea > Column [Fixed Header, Expanded +
-  SingleChildScrollView, Fixed Bottom Controls]` — header dan navigasi
-  bawah tetap terlihat, hanya konten soal yang discroll.
-- Responsive: memakai `MediaQuery`, `LayoutBuilder`, `ConstrainedBox`,
-  `Expanded`/`Flexible`, dan padding yang menyesuaikan lebar layar
-  (termasuk pembatasan lebar konten pada tablet agar tidak terlalu lebar).
-- Tidak ada state-management package eksternal (Provider/Bloc/Riverpod/
-  GetX) — murni `StatefulWidget` + `setState`.
-- Tidak ada asset eksternal — hanya Material Icons bawaan Flutter.
+| Fitur | Deskripsi |
+|-------|-----------|
+| **Autentikasi** | Login & Register (dummy, tanpa backend) |
+| **Beranda** | Dashboard profil, statistik, grid materi |
+| **Materi** | Daftar materi, viewer materi halaman-per-halaman |
+| **Mesin Tes** | Engine Pre-Test/Post-Test reusable (20 soal, navigasi, timer UI) |
+| **Pre-Test** | 20 soal dummy Pre-Test menggunakan mesin tes |
+| **Post-Test** | 20 soal dummy Post-Test (beberapa berisi kode Python) |
+| **Papan Peringkat** | Leaderboard dengan podium Top 3 dan ranking list |
+| **Profil** | Halaman profil, pengaturan akun, logout |
+| **Sertifikat** | Daftar sertifikat + CRUD upload sertifikat baru |
 
-## Cara menjalankan
+---
 
-1. Pastikan Flutter SDK sudah terpasang (`flutter --version`).
-2. Salin/replace folder `lib/` dan `pubspec.yaml` ini ke dalam folder
-   project Flutter yang sudah ada (atau jalankan `flutter create .` di
-   folder ini terlebih dahulu jika folder platform seperti `android/`,
-   `ios/` belum ada).
-3. Install dependencies:
+## Penamaan Kode
 
-   ```bash
-   flutter pub get
-   ```
+Semua identifier buatan sendiri menggunakan **Bahasa Indonesia** (`camelCase` / `PascalCase`).
+Istilah Flutter/Dart bawaan (`Widget`, `State`, `BuildContext`) tetap bahasa Inggris.
 
-4. Jalankan di device/emulator Android yang terhubung:
+Lihat [CODING_STANDARD.md](./CODING_STANDARD.md) untuk detail lengkap.
 
-   ```bash
-   flutter run
-   ```
+---
 
-   Atau untuk build APK release yang bisa diinstall langsung ke real
-   Android device:
+## Cara Menjalankan
 
-   ```bash
-   flutter build apk --release
-   ```
+```bash
+# 1. Install dependencies
+flutter pub get
 
-   File APK akan ada di `build/app/outputs/flutter-apk/app-release.apk`.
+# 2. Jalankan di device/emulator
+flutter run
 
-## Catatan integrasi ke project yang sudah ada
+# 3. Build APK release (opsional)
+flutter build apk --release
+```
 
-Jika project Flutter kamu sudah punya `lib/main.dart` lain, cukup:
+---
 
-- Copy folder `lib/models`, `lib/data`, `lib/theme`, `lib/screens`,
-  `lib/widgets` ke dalam `lib/` project kamu.
-- Replace atau gabungkan isi `lib/main.dart` sesuai kebutuhan (atau panggil
-  `TestPage(title: 'Pre-Test Dasar Python', questions: preTestQuestions)`
-  dari halaman/menu yang sudah ada).
-- Tidak perlu menambahkan dependency baru di `pubspec.yaml` selain yang
-  sudah ada di Flutter SDK bawaan (`cupertino_icons` sudah default di
-  hampir semua project Flutter baru).
+## Format & Analisis
+
+```bash
+dart format lib/
+flutter analyze
+# Harus 0 error dan 0 warning sebelum commit
+```

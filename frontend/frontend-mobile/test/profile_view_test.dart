@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:pretest_posttest_app/views/profile/profile_view.dart';
+import 'package:pretest_posttest_app/fitur/profil/views/profil_view.dart';
 
 void main() {
-  testWidgets('ProfileView renders header, menu, and logout button',
+  testWidgets('ProfilView renders header, menu, and logout button',
       (WidgetTester tester) async {
     await tester.pumpWidget(
-      const MaterialApp(home: ProfileView()),
+      const MaterialApp(home: ProfilView()),
+
     );
 
     expect(find.text('Seto Son Horeg'), findsOneWidget);
