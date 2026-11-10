@@ -4,6 +4,7 @@ import 'package:pretest_posttest_app/inti/konstanta/warna_aplikasi.dart';
 import 'package:pretest_posttest_app/inti/widgets/navigasi_bawah.dart';
 import 'package:pretest_posttest_app/fitur/autentikasi/views/login_view.dart';
 import 'package:pretest_posttest_app/fitur/papan_peringkat/views/papan_peringkat_view.dart';
+import 'package:pretest_posttest_app/fitur/profil/views/pengaturan_akun_view.dart';
 import 'package:pretest_posttest_app/fitur/sertifikat/views/sertifikat_view.dart';
 
 /// Halaman Profil pengguna.
@@ -53,15 +54,6 @@ class ProfilView extends StatelessWidget {
         // Sudah berada di halaman Profil.
         break;
     }
-  }
-
-  // ── Placeholder aksi menu ────────────────────────────────────────────────
-  void _tampilkanSegera(BuildContext context, String namaHalaman) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        SnackBar(content: Text('$namaHalaman (coming soon)')),
-      );
   }
 
   Future<void> _konfirmasiKeluar(BuildContext context) async {
@@ -159,8 +151,13 @@ class ProfilView extends StatelessWidget {
                                 _TombolMenuProfil(
                                   label: 'Pengaturan akun siswa',
                                   terisi: true,
-                                  saatDiketuk: () => _tampilkanSegera(
-                                      context, 'Halaman Pengaturan akun siswa'),
+                                  saatDiketuk: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (_) => PengaturanAkunView(
+                                        namaAwal: nama,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 const SizedBox(height: 14),
                                 _TombolMenuProfil(

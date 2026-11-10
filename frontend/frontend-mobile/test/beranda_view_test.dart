@@ -3,7 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:pretest_posttest_app/fitur/beranda/views/beranda_view.dart';
 
 void main() {
-  testWidgets('BerandaView renders header and status bar style properly', (WidgetTester tester) async {
+  testWidgets('BerandaView renders header and status bar style properly',
+      (WidgetTester tester) async {
     await tester.pumpWidget(
       const MaterialApp(
         home: BerandaView(),
